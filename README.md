@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# n8n Workflow Editor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A small React + TypeScript app that lets you build and execute simple workflow graphs in the browser.
 
-## Available Scripts
+## What it does
 
-In the project directory, you can run:
+- Renders a canvas-based workflow editor
+- Supports three node types:
+  - `start` — an empty starting node
+  - `log` — prints text to the console
+  - `color` — prints colored text to the console
+- Lets you drag nodes from the sidebar onto the canvas
+- Lets you connect nodes by selecting one node and clicking another
+- Lets you delete nodes and edges
+- Ensures there is only one `start` node on the canvas
+- Executes the workflow from the `start` node path
 
-### `npm start`
+## Project structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- `src/App.tsx`
+  - main application state
+  - handles node/edge creation, drag-and-drop, selection, and execution
+- `src/components/Toolbar.tsx`
+  - top toolbar for adding nodes and running the workflow
+- `src/components/NodeSidebar.tsx`
+  - drag source for node types
+- `src/components/WorkflowNodeCard.tsx`
+  - visual node card rendered on the canvas
+  - supports editing node content and deleting nodes
+- `src/components/CanvasEdges.tsx`
+  - renders edge lines between nodes
+  - supports click-to-delete with confirmation
+- `src/workflow/types.ts`
+  - node and edge TypeScript definitions
+  - layout constants and initial node definitions
+- `src/workflow/executeWorkflow.ts`
+  - traverses the node graph
+  - starts execution at `start` nodes
+  - prints node output to the browser console
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How it is implemented
 
-### `npm test`
+- Uses React state hooks in `App.tsx`
+  - `nodes`, `edges`, `selectedSource`, `draggingId`, `dragOffset`
+- Node creation is centralized via `createNode(...)`
+- Drag-and-drop from sidebar is implemented using DOM drag events
+- Canvas drop positions are calculated from bounding rectangles
+- Node linking is handled by selecting a source node and then clicking a target node
+- Edge removal uses a dedicated edge hitbox and a confirmation tooltip
+- Workflow execution uses a directed adjacency traversal:
+  - start from `start` node(s)
+  - log output for `log` nodes
+  - log styled output for `color` nodes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Running locally
 
-### `npm run build`
+```bash
+npm install
+npm run dev
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then open the local development URL shown in the terminal.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Notes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- A `start` node is required for predictable execution order
+- The UI prevents adding more than one `start` node
+- Removing a node also removes any connected edges automatically
+- The workflow is executed in a depth-first traversal from the start node(s)
