@@ -1,3 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +53,261 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #1e293b;
+  background: #111827;
+}
+
+.toolbar h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.toolbar p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.canvas {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        rgba(148, 163, 184, 0.18) 1px,
+        transparent 0
+      )
+      0 0 / 24px 24px,
+    #0f172a;
+}
+
+.edges {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  z-index: 0;
+}
+
+.edge {
+  stroke: #60a5fa;
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.edge-hitbox {
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.edge-hitbox:hover + .edge {
+  stroke: #ef4444;
+  stroke-width: 3;
+}
+
+.edge-pending {
+  stroke: #ef4444;
+  stroke-width: 3;
+}
+
+.edge-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -120%);
+  z-index: 20;
+  background: #111827;
+  color: #f9fafb;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+}
+
+.edge-tooltip p {
+  margin: 0 0 8px;
+}
+
+.edge-tooltip-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.edge-tooltip button {
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: #f9fafb;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.button.danger {
+  border-color: #b91c1c;
+  background: #7f1d1d;
+}
+
+.node {
+  position: absolute;
+  width: 220px;
+  min-height: 150px;
+  padding: 12px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.96);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  user-select: none;
+  cursor: move;
+}
+
+.node.selected {
+  outline: 2px solid #38bdf8;
+}
+
+.node.log {
+  border-color: #2563eb;
+}
+
+.node.color {
+  border-color: #ef4444;
+}
+
+.node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.node-id {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.node label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.node input[type="text"],
+.node input:not([type]) {
+  width: 100%;
+}
+
+.node input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #020617;
+  color: #e2e8f0;
+}
+
+.node input[type="color"] {
+  height: 40px;
+  padding: 4px;
+}
+
+.node-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.button.danger {
+  border-color: #b91c1c;
+  background: #7f1d1d;
+}
+
+.node-sidebar-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  height: calc(100vh - 88px);
+}
+
+.node-sidebar {
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 12px;
+  background: #141414;
+}
+
+.node-sidebar h3 {
+  margin: 0 0 4px;
+}
+
+.node-sidebar p {
+  margin: 0 0 10px;
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.node-sidebar-list {
+  display: grid;
+  gap: 8px;
+}
+
+.node-sidebar-item {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  background: #1f1f1f;
+  cursor: grab;
+}
+
+.node-sidebar-item:active {
+  cursor: grabbing;
+}
+
+.node.start {
+  border-color: #22c55e;
 }
